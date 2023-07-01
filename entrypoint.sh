@@ -145,7 +145,7 @@ if [[ $arch = "arm64" ]]; then
             host_make_opts="HOSTCC=clang HOSTCXX=clang++ HOSTLD=ld.lld HOSTAR=llvm-ar"
         fi
 
-        apt install -y --no-install-recommends libgcc-10-dev || exit 127
+        apt install -y --no-install-recommends libgcc-10-dev zstd || exit 127
         mkdir /neutron-clang && cd /neutron-clang
         bash <(curl -s "https://raw.githubusercontent.com/Neutron-Toolchains/antman/main/antman") -S=${ver_number}
         cd "$workdir"/"$kernel_path" || exit 127
