@@ -1,4 +1,4 @@
-FROM docker.io/library/ubuntu:jammy
+FROM docker.io/library/ubuntu:kinetic
 ENV DEBIAN_FRONTEND noninteractive
 COPY entrypoint.sh /entrypoint.sh
 ENTRYPOINT [ "/entrypoint.sh" ]
