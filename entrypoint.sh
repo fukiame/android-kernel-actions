@@ -131,6 +131,28 @@ if [[ $arch = "arm64" ]]; then
         export PATH="$proton_path/bin:${PATH}"
         export CLANG_TRIPLE="aarch64-linux-gnu-"
 
+    elif [[ $compiler = neutron-clang/* ]]; then
+        ver="${compiler/neutron-clang\/}"
+        ver_number="${ver/\/binutils}"
+        binutils="$([[ $ver = */binutils ]] && echo true || echo false)"
+
+        if $binutils; then
+            make_opts="CC=clang"
+            host_make_opts="HOSTCC=clang HOSTCXX=clang++"
+        else
+            make_opts="CC=clang LD=ld.lld NM=llvm-nm AR=llvm-ar STRIP=llvm-strip OBJCOPY=llvm-objcopy"
+            make_opts+=" OBJDUMP=llvm-objdump READELF=llvm-readelf LLVM_IAS=1"
+            host_make_opts="HOSTCC=clang HOSTCXX=clang++ HOSTLD=ld.lld HOSTAR=llvm-ar"
+        fi
+
+        apt install -y --no-install-recommends libgcc-10-dev || exit 127
+        mkdir /neutron-clang && cd /neutron-clang
+        bash <(curl -s "https://raw.githubusercontent.com/Neutron-Toolchains/antman/main/antman") -S=${ver_number}
+        cd "$workdir"/"$kernel_path" || exit 127
+
+        export PATH="/neutron-clang/bin:${PATH}"
+        export CLANG_TRIPLE="aarch64-linux-gnu-"
+
     elif [[ $compiler = aosp-clang/* ]]; then
         ver="${compiler/aosp-clang\/}"
         ver_number="${ver/\/binutils}"
