@@ -148,7 +148,10 @@ if [[ $arch = "arm64" ]]; then
         apt install -y --no-install-recommends libgcc-10-dev zstd libxml2 libarchive-tools || exit 127
         mkdir /neutron-clang && cd /neutron-clang
         curl -LO "https://raw.githubusercontent.com/Neutron-Toolchains/antman/main/antman"
-        bash antman -S=${ver_number}
+        if ! bash antman -S=${ver_number} &>/dev/null; then
+            err "Failed downloading toolchain, refer to the README for details"
+            exit 1
+        fi
         cd "$workdir"/"$kernel_path" || exit 127
 
         export PATH="/neutron-clang/bin:${PATH}"
