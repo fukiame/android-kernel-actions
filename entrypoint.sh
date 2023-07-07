@@ -224,7 +224,11 @@ cd "$workdir"/"$kernel_path" || exit 127
 start_time="$(date +%s)"
 date="$(date +%d%m%Y-%I%M)"
 tag="$(git branch | sed 's/*\ //g')"
-echo "branch/tag: $tag"
+if [ ! -n $tag ]; then
+    echo "branch/tag: $tag"
+else
+    echo "no branch/tag specified"
+fi
 echo "make options:" $arch_opts $make_opts $host_make_opts
 msg "Generating defconfig from \`make $defconfig\`..."
 if ! make O=out $arch_opts $make_opts $host_make_opts "$defconfig"; then
@@ -241,7 +245,11 @@ if ! make O=out $arch_opts $make_opts $host_make_opts -j"$(nproc --all)"; then
 fi
 set_output elapsed_time "$(echo "$(date +%s)"-"$start_time" | bc)"
 msg "Packaging the kernel..."
-zip_filename="${name}-${tag}-${date}.zip"
+if [ ! -n $tag ]; then
+    zip_filename="${name}-${tag}-${date}.zip"
+else
+    zip_filename="${name}-${date}.zip"
+fi
 if [[ -e "$workdir"/"$zipper_path" ]]; then
     cp out/arch/"$arch"/boot/"$image" "$workdir"/"$zipper_path"/"$image"
     cp out/arch/"$arch"/boot/dts/*/*.dtb "$workdir"/"$zipper_path"/dtb
