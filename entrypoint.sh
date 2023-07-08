@@ -157,6 +157,35 @@ if [[ $arch = "arm64" ]]; then
         export PATH="/neutron-clang/bin:${PATH}"
         export CLANG_TRIPLE="aarch64-linux-gnu-"
 
+    elif [[ $compiler = zyc-clang/* ]]; then
+        ver="${compiler/zyc-clang\/}"
+        ver_number="${ver/\/binutils}"
+        binutils="$([[ $ver = */binutils ]] && echo true || echo false)"
+        isLatest="$([[ $ver = *latest* ]] && echo true || echo false)"
+
+        if $binutils; then
+            make_opts="CC=clang"
+            host_make_opts="HOSTCC=clang HOSTCXX=clang++"
+        else
+            make_opts="CC=clang LD=ld.lld NM=llvm-nm AR=llvm-ar STRIP=llvm-strip OBJCOPY=llvm-objcopy"
+            make_opts+=" OBJDUMP=llvm-objdump READELF=llvm-readelf LLVM_IAS=1"
+            host_make_opts="HOSTCC=clang HOSTCXX=clang++ HOSTLD=ld.lld HOSTAR=llvm-ar"
+        fi
+
+        apt install -y --no-install-recommends libgcc-10-dev zstd libxml2 libarchive-tools || exit 127
+        if $isLatest; then
+            url=$(curl https://raw.githubusercontent.com/ZyCromerZ/Clang/main/Clang-main-link.txt)
+        else
+            url="https://github.com/ZyCromerZ/Clang/releases/download/17.0.0-${ver_number}-release/Clang-17.0.0-${ver_number}.tar.gz"
+        fi
+
+        mkdir /zyc-clang && cd /zyc-clang
+	curl -LO ${url}
+        cd "$workdir"/"$kernel_path" || exit 127
+
+        export PATH="/zyc-clang/bin:${PATH}"
+        export CLANG_TRIPLE="aarch64-linux-gnu-"
+
     elif [[ $compiler = aosp-clang/* ]]; then
         ver="${compiler/aosp-clang\/}"
         ver_number="${ver/\/binutils}"
