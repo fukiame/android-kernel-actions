@@ -181,7 +181,7 @@ if [[ $arch = "arm64" ]]; then
 
         mkdir /zyc-clang && cd /zyc-clang
         curl -LO ${url}
-	tar -zxf *.tar.gz
+        tar -zxf *.tar.gz
         cd "$workdir"/"$kernel_path" || exit 127
 
         export PATH="/zyc-clang/bin:${PATH}"
