@@ -17,6 +17,12 @@ inputs:
   image:
     description: Kernel image name
     required: true
+  kbuild_user:
+    description: KBUILD_BUILD_USER
+    required: false
+  kbuild_host:
+    description: KBUILD_BUILD_HOST
+    required: false
 outputs:
   outfile:
     description: Zip file generated from build
@@ -28,3 +34,5 @@ runs:
     - ${{ inputs.compiler }}
     - ${{ inputs.defconfig }}
     - ${{ inputs.image }}
+    - ${{ inputs.kbuild_user }}
+    - ${{ inputs.kbuild_host }}
