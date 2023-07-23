@@ -250,11 +250,11 @@ else
     exit 100
 fi
 
-if [ -n $KBUILD_BUILD_USER ]; then
+if [ ! -n $KBUILD_BUILD_USER ]; then
     export KBUILD_BUILD_USER=github
 fi
 
-if [ -n $KBUILD_BUILD_HOST ]; then
+if [ ! -n $KBUILD_BUILD_HOST ]; then
     export KBUILD_BUILD_HOST=githubCI
 fi
 
