@@ -26,8 +26,6 @@ arch="$1"
 compiler="$2"
 defconfig="$3"
 image="$4"
-kbuild_user="$5"
-kbuild_host="$6"
 repo_name="${GITHUB_REPOSITORY/*\/}"
 zipper_path="${ZIPPER_PATH:-zipper}"
 kernel_path="${KERNEL_PATH:-.}"
@@ -252,15 +250,11 @@ else
     exit 100
 fi
 
-if [ ! -n $kbuild_user ]; then
-    export KBUILD_BUILD_USER=$kbuild_user
-else
+if [ -n $KBUILD_BUILD_USER ]; then
     export KBUILD_BUILD_USER=github
 fi
 
-if [ ! -n $kbuild_host ]; then
-    export KBUILD_BUILD_HOST=$kbuild_host
-else
+if [ -n $KBUILD_BUILD_HOST ]; then
     export KBUILD_BUILD_HOST=githubCI
 fi
 
