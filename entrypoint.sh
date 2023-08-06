@@ -86,7 +86,7 @@ if [[ $arch = "arm64" ]]; then
             exit 1
         fi
 
-        apt install -y --no-install-recommends libgcc-13-dev || exit 127
+        apt install -y --no-install-recommends gcc-13 || exit 127
 
         extract_tarball /tmp/evagcc-arm64-"${ver_number}".tar.gz /
         cd /gcc-arm64-"${ver_number}"* || exit 127
