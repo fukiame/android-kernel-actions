@@ -62,32 +62,19 @@ if [[ $arch = "arm64" ]]; then
         ln -sf /usr/bin/arm-linux-gnueabi-gcc-"$ver_number" /usr/bin/arm-linux-gnueabi-gcc
 
     elif [[ $compiler = evagcc/* ]]; then
-        ver_number="${compiler/evagcc\/}"
+        #ver_number="${compiler/evagcc\/}"
         host_make_opts=""
 
 	make_opts="CROSS_COMPILE=aarch64-elf- CROSS_COMPILE_ARM32=arm-eabi- AR=aarch64-elf-ar"
 	make_opts+=" NM=llvm-nm LD=ld.lld OBCOPY=llvm-objcopy"
 	make_opts+=" OBJDUMP=aarch64-elf-objdump STRIP=aarch64-elf-strip"
 
-        url="https://github.com/mvaisakh/gcc-arm64/archive/${ver_number}.tar.gz"
-        echo "Downloading $url"
-        if ! wget --no-check-certificate "$url" -O /tmp/evagcc-arm64-"${ver_number}".tar.gz &>/dev/null; then
-            err "Failed downloading toolchain, refer to the README for details"
-            exit 1
-        fi
+	[ git clone --depth=1 https://github.com/mvaisakh/gcc-arm64 /gcc-arm64 ] || exit 127
+	[ git clone --depth=1 https://github.com/mvaisakh/gcc-arm /gcc-arm ] || exit 127
 
-        url="https://github.com/mvaisakh/gcc-arm/archive/${ver_number}.tar.gz"
-        echo "Downloading $url"
-        if ! wget --no-check-certificate "$url" -O /tmp/evagcc-arm-"${ver_number}".tar.gz &>/dev/null; then
-            err "Failed downloading toolchain, refer to the README for details"
-            exit 1
-        fi
-
-        extract_tarball /tmp/evagcc-arm64-"${ver_number}".tar.gz /
-        cd /gcc-arm64-"${ver_number}"* || exit 127
+        cd /gcc-arm64
         evagcc64_path="$(pwd)"
-        extract_tarball /tmp/evagcc-arm-"${ver_number}".tar.gz /
-        cd /gcc-arm-"${ver_number}"* || exit 127
+        cd /gcc-arm
         evagcc_path="$(pwd)"
 
         cd "$workdir"/"$kernel_path" || exit 127
