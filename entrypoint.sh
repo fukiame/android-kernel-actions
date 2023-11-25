@@ -31,12 +31,9 @@ zipper_path="${ZIPPER_PATH:-zipper}"
 kernel_path="${KERNEL_PATH:-.}"
 name="${NAME:-$repo_name}"
 
-msg "Updating container..."
-apt update && apt upgrade -y
-msg "Installing essential packages..."
-apt install -y --no-install-recommends git make bc bison openssl \
-    curl zip kmod cpio flex libelf-dev libssl-dev libtfm-dev wget \
-    device-tree-compiler ca-certificates python3 xz-utils
+msg "Installing packages..."
+dnf group install development-tools -y
+dnf install llvm lld bc bison ca-certificates curl flex glibc-devel.i686 glibc-devel binutils-devel openssl python3 python2 zstd clang gcc-arm-linux-gnu dtc libxml2 libarchive openssl-devel perl tomsfastmath-devel wget xz -y
 ln -sf "/usr/bin/python3" /usr/bin/python
 set_output hash "$(cd "$kernel_path" && git rev-parse HEAD || exit 127)"
 msg "Installing toolchain..."
@@ -85,8 +82,6 @@ if [[ $arch = "arm64" ]]; then
             err "Failed downloading toolchain, refer to the README for details"
             exit 1
         fi
-
-        apt install -y --no-install-recommends gcc-13 || exit 127
 
         extract_tarball /tmp/evagcc-arm64-"${ver_number}".tar.gz /
         cd /gcc-arm64-"${ver_number}"* || exit 127
