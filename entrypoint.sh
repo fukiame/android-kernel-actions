@@ -69,8 +69,8 @@ if [[ $arch = "arm64" ]]; then
 	make_opts+=" NM=llvm-nm LD=ld.lld OBCOPY=llvm-objcopy"
 	make_opts+=" OBJDUMP=aarch64-elf-objdump STRIP=aarch64-elf-strip"
 
-	[ git clone --depth=1 https://github.com/mvaisakh/gcc-arm64 /gcc-arm64 ] || exit 127
-	[ git clone --depth=1 https://github.com/mvaisakh/gcc-arm /gcc-arm ] || exit 127
+	git clone --depth=1 https://github.com/mvaisakh/gcc-arm64 /gcc-arm64 || exit 127
+	git clone --depth=1 https://github.com/mvaisakh/gcc-arm /gcc-arm || exit 127
 
         cd /gcc-arm64
         evagcc64_path="$(pwd)"
