@@ -66,15 +66,15 @@ if [[ $arch = "arm64" ]]; then
         host_make_opts=""
 
         export CROSS_COMPILE="aarch64-elf-"
-	export CROSS_COMPILE_ARM32="arm-eabi-"
-	export CROSS_COMPILE_COMPAT="arm-eabi-"
+        export CROSS_COMPILE_ARM32="arm-eabi-"
+        export CROSS_COMPILE_COMPAT="arm-eabi-"
 
-	make_opts="CROSS_COMPILE=aarch64-elf- CROSS_COMPILE_ARM32=arm-eabi- AR=aarch64-elf-ar"
-	make_opts+=" NM=llvm-nm LD=ld.lld OBCOPY=llvm-objcopy"
-	make_opts+=" OBJDUMP=aarch64-elf-objdump STRIP=aarch64-elf-strip"
+        make_opts="CROSS_COMPILE=aarch64-elf- CROSS_COMPILE_ARM32=arm-eabi- AR=aarch64-elf-ar"
+        make_opts+=" NM=llvm-nm LD=ld.lld OBCOPY=llvm-objcopy"
+        make_opts+=" OBJDUMP=aarch64-elf-objdump STRIP=aarch64-elf-strip"
 
-	git clone --depth=1 https://github.com/mvaisakh/gcc-arm64 /gcc-arm64 || exit 127
-	git clone --depth=1 https://github.com/mvaisakh/gcc-arm /gcc-arm || exit 127
+        git clone --depth=1 https://github.com/mvaisakh/gcc-arm64 /gcc-arm64 || exit 127
+        git clone --depth=1 https://github.com/mvaisakh/gcc-arm /gcc-arm || exit 127
 
         cd /gcc-arm64
         evagcc64_path="$(pwd)"
